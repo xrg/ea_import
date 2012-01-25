@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="ea_import_template_line_tree">
+            <field name="name">ea_import.template.line.tree</field>
+            <field name="model">ea_import.template.line</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Template Line">
+                    <field name="name"/>
+                    <field name="template_id"/>
+                    <field name="sequence"/>
+                    <field name="field_expression"/>
+                    <field name="field_type"/>
+                    <field name="create_new"/>
+                    <field name="required"/>
+                    <field name="header_column_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ea_import_template_line_form">
+            <field name="name">ea_import.template.line.form</field>
+            <field name="model">ea_import.template.line</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Template Line" col="8">
+                    <field name="name" colspan="6"/>
+                    <field name="template_id" invisible='2'/>
+                    <field name="sequence" colspan="2"/>
+                    <field name="field_expression" colspan="8"/>
+                    <field name="field_type" colspan="4"/>
+                    <field name="time_format" colspan="4" attrs="{'invisible': [('field_type', '!=', 'date')]}"/>
+                    <separator string="Validation" colspan="8"/>
+                    <field name="test_result_field" colspan="4"/>
+                    <field name="header_column_name" colspan="4"/>
+                    <separator colspan="8"/>
+                    <field name="create_new" colspan="2"/>
+                    <field name="required" colspan="2"/>
+                    <field name="test_result_record_number" colspan="4"/>
+                    <button string="Test" type="object" name="set_test_result_field" icon="terp-tool" colspan="8"/>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="ea_import_template_line_action">
+            <field name="name">Import Template Lines</field>
+            <field name="res_model">ea_import.template.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="ea_import_template_line_tree"/>
+	    <field name="target">current</field>
+        </record>        
+
+
+        <menuitem name="Template Lines" id="ea_import_template_line_menu" parent="ea_import_menu" action="ea_import_template_line_action"/>
+
+    </data>
+</openerp>
