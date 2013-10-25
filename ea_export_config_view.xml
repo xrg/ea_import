@@ -68,7 +68,7 @@
             <field name="target">current</field>
         </record>
 
-        <menuitem name="Configs" id="menu_configs" parent="ea_import_menu" icon="gtk-execute"/>
+        <menuitem name="Configs" id="menu_configs" parent="ea_import_menu"/>
             <menuitem name="Export configuration" id="ea_export_config_menu" parent="menu_configs" action="ea_export_config_action" sequence="1"/>
     </data>
 </openerp>
