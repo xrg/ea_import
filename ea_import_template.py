@@ -21,7 +21,7 @@
 from osv import osv
 from osv import fields
 from psycopg2.extensions import adapt
-import sys
+
 
 class ea_import_template_unique_rule(osv.osv):
 
@@ -91,6 +91,9 @@ ea_import_template_unique_rule()
 
 class ea_import_template(osv.osv):
     _name = 'ea_import.template'
+
+    _order = 'target_model_id, chain_id, sequence'
+
     _columns = {
         'name': fields.char('Name', size=256),
         'target_model_id': fields.many2one('ir.model', 'Target Model'),
@@ -101,7 +104,16 @@ class ea_import_template(osv.osv):
         'create_unique_only': fields.boolean('Create Unique only', help="Create record only if one matching key does not already exist.  Do not use with 'update'."),
         'line_ids': fields.one2many('ea_import.template.line', 'template_id', 'Template Lines', ),
         'matching_rules_ids': fields.one2many('ea_import.template.unique.rule', 'template_id', 'Import Unique Rule'),
+        'chain_id': fields.many2one('ea_import.chain', 'Import Chain'),
+        'sequence': fields.integer('Sequence',),
+        'post_import_hook': fields.char('Post-import method', size=512,
+                                        help="Execute method after importing all records.\n"\
+                                        "<target_model>.<function_name>(cr, uid, ids_of_imported_records, context=context)"),
         }
+
+    _defaults = {
+        'sequence': 1,
+    }
 
     def generate_record(self, cr, uid, ids, record_list, row_number, context={}):
         result = []
@@ -153,7 +165,7 @@ class ea_import_template(osv.osv):
                         try:
                             new_rec_id = target_model_pool.create(cr, uid, record, context=context)
                         except Exception, e:
-                            raise osv.except_osv(('Error creating record!'), ("Error message: %s\nRow Number: %s\n\nRecord: %s" % (e,row_number, record)))
+                            raise osv.except_osv(('Error creating record!'), ("Error message: %s\nRow Number: %s\n\nRecord: %s" % (e, row_number, record)))
                         new_rec = target_model_pool.browse(cr, uid, new_rec_id)
                         if getattr(new_rec, target_model_pool._rec_name):
                             log_row_name = getattr(new_rec, target_model_pool._rec_name)
@@ -245,6 +257,28 @@ class ea_import_template(osv.osv):
                 else:
                     filtered_old_record[key] = value
         return any([filtered_old_record.get(key) != value for key, value in record.items()])
+
+    def update_templates(self, cr, uid):
+        """Relink templates from old table 'ea_import_chain_link'
+        directly to ea_import_chain
+        """
+        cr.execute("""SELECT *
+                    FROM information_schema.tables
+                    WHERE table_name='ea_import_chain_link'""")
+        if cr.fetchone()[0]:
+            cr.execute("""UPDATE ea_import_template tmpl
+                        SET sequence = q1.sequence,
+                            chain_id = q1.chain_id,
+                            post_import_hook = q1.post_import_hook
+                        FROM (SELECT eit.id,
+                            eicl.sequence,
+                            eicl.chain_id,
+                            eicl.post_import_hook
+                              from ea_import_template eit
+                              LEFT JOIN ea_import_chain_link eicl ON eicl.template_id = eit.id) as q1
+                        WHERE tmpl.id = q1.id
+            """)
+        return True
 
 ea_import_template()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

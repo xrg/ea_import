@@ -14,6 +14,9 @@
                     <field name="update"/>
                     <field name="update_current"/>
                     <field name="create_new"/>
+                    <field name="chain_id"/>
+                    <field name="sequence"/>
+                    <field name="post_import_hook"/>
                     <field name="line_ids" nolabel="1"/>
                 </tree>
             </field>
@@ -28,6 +31,9 @@
                     <group colspan="2" col="4">
                         <field name="name" colspan="4"/>
                         <field name="target_model_id" colspan="4"/>
+                        <field name="chain_id"/>
+                        <field name="sequence"/>
+                        <field name="post_import_hook" colspan="4"/>
                         <separator colspan="4"/>
                         <field name="update" colspan="2" attrs="{'invisible': [('create_unique_only','!=',False)]}"/>
                         <field name="update_current" colspan="2" attrs="{'invisible': ['|',('update', '=', False),('create_unique_only','!=',False)]}"/>
@@ -65,6 +71,7 @@
                 <search string="Templates">
                     <field name="name"/>
                     <field name="target_model_id"/>
+                    <field name="chain_id"/>
                 </search>
             </field>
         </record>

@@ -27,7 +27,6 @@ import configs
 import ea_import_chain
 import ea_import_log
 import ea_import_scheduler
-import ea_import_chain_link
 import ea_import_chain_result
 import wizard
 import ea_export_config

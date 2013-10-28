@@ -60,7 +60,7 @@ class ea_import_chain(osv.osv):
         'ftp_config_id': fields.many2one('import.ftp_config', 'FTP Configuration'),
         'input_file': fields.binary('Test Importing File', required=False),
         'header': fields.boolean('Header'),
-        'link_ids': fields.one2many('ea_import.chain.link', 'chain_id', 'Chain Links', ),
+        'template_ids': fields.one2many('ea_import.template', 'chain_id', 'Templates', ),
         'result_ids': fields.one2many('ea_import.chain.result', 'chain_id', 'Import Results', ),  # to be removed
         'log_ids': fields.one2many('ea_import.log', 'chain_id', 'Import Log', ),
         'separator': fields.selection([
@@ -162,16 +162,16 @@ class ea_import_chain(osv.osv):
             if chain.header:
                 csv_reader.next()
             result = {}
-            for chain_link in chain.link_ids:
-                model_name = chain_link.template_id.target_model_id.model
+            for template in chain.template_ids:
+                model_name = template.target_model_id.model
                 self.check_active_ids(context=context)
-                result.update({model_name: {'ids': set([]), 'post_import_hook': chain_link.post_import_hook}})
+                result.update({model_name: {'ids': set([]), 'post_import_hook': template.post_import_hook}})
             for row_number, record_list in enumerate(csv_reader):
-                if len(record_list) < max([template_line.sequence for template_line in chain_link.template_id.line_ids for chain_link in chain.link_ids]):
+                if len(record_list) < max([template_line.sequence for template_line in template.line_ids for template in chain.template_ids]):
                     raise osv.except_osv(('Error !'), ("Invalid File or template definition. You have less columns in file than in template. Check the file separator or delimiter or template."))
-                for chain_link in sorted(chain.link_ids, key=lambda k: k.sequence):
-                    model_name = chain_link.template_id.target_model_id.model
-                    result_id = chain_link.template_id.generate_record(record_list, row_number, context=context)
+                for template in sorted(chain.template_ids, key=lambda k: k.sequence):
+                    model_name = template.target_model_id.model
+                    result_id = template.generate_record(record_list, row_number, context=context)
                     result[model_name]['ids'] = result[model_name]['ids'] | set(result_id)
             for name, imported_ids, post_import_hook in [(name, value['ids'], value['post_import_hook']) for name, value in result.iteritems()]:
                 if post_import_hook and hasattr(self.pool.get(name), post_import_hook):
