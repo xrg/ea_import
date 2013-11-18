@@ -96,16 +96,6 @@ class ea_import_chain(osv.osv):
         'type': 'csv',
     }
 
-    def copy(self, cr, uid, id, default=None, context=None):
-            if default is None:
-                default = {}
-            default.update({'result_ids': [],
-                            'log_ids': [],
-                            'ir_act_window_id': False,
-                            'ir_value_id': False,
-                            })
-            return super(ea_import_chain, self).copy(cr, uid, id, default, context)
-
     def get_mysql_data(self, config_obj):
         connect = mdb.connect(host=config_obj.host, user=config_obj.username,
                            passwd=config_obj.passwd, db=config_obj.db)

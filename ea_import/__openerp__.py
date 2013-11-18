@@ -52,9 +52,8 @@
                     'data/update_templates.xml',
                     ],
     'active': False,
-    'application': True,
     'installable': True,
-    'images': ['images/chain_form.png', 'images/template_form.png'],
+    'images': ['images/chain_form.png', 'images/template_list.png'],
     'external_dependencies': {
                             'python': ['MySQLdb']  # On Linux can be installed using 'apt-get install python-mysqldb'
                             }

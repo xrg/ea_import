@@ -93,6 +93,7 @@ class ea_import_template(osv.osv):
     _name = 'ea_import.template'
 
     _order = 'target_model_id, chain_id, sequence'
+
     _columns = {
         'name': fields.char('Name', size=256),
         'target_model_id': fields.many2one('ir.model', 'Target Model'),

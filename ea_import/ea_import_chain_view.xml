@@ -37,7 +37,7 @@
                         <group colspan="2" col="2">
                             <separator string="Sidebar button" colspan="2"/>
                             <field name="model_id"/>
-                            <button name="create_action" string="Add sidebar button" type="object" icon="gtk-execute"
+                            <button name="create_action" string="Add sidebar button" type="object"
                                     colspan="2" attrs="{'invisible':[('ir_act_window_id','!=',False)]}"/>
                             <field name="ir_act_window_id" attrs="{'invisible':[('ir_act_window_id','=',False)]}"/>
                             <field name="ir_value_id" attrs="{'invisible':[('ir_act_window_id','=',False)]}"/>
