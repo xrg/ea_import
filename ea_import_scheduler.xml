@@ -27,7 +27,7 @@
                         <field name="import_chain_id"  widget="selection"/>
                         <newline/>                       
                     </group>
-                    <button name="run_import" string="Run Import" type="object" icon="gtk-execute"/>
+                    <button name="run_import" string="Run Import" type="object"/>
                     <newline/>                
                     <field name="log_ids" nolabel="1" readonly="0">
                         <tree string="Logs">

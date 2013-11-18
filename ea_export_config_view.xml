@@ -37,7 +37,7 @@
                         <field name="model_id"/>
                         <field name="ir_act_report_id" attrs="{'invisible':[('ir_act_report_id','=',False)]}"/>
                         <field name="ir_value_id" attrs="{'invisible':[('ir_act_report_id','=',False)]}"/>
-                        <button name="create_action" string="Add report" type="object" icon="gtk-execute"
+                        <button name="create_action" string="Add report" type="object"
                             colspan="8" attrs="{'invisible':[('ir_act_report_id','!=',False)]}"/>
                         <button name="unlink_action" string="Remove report" type="object" icon="gtk-delete"
                             colspan="8" attrs="{'invisible':[('ir_act_report_id','=',False)]}" />
