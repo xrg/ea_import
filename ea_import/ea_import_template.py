@@ -264,7 +264,7 @@ class ea_import_template(osv.osv):
         cr.execute("""SELECT *
                     FROM information_schema.tables
                     WHERE table_name='ea_import_chain_link'""")
-        if cr.fetchone()[0]:
+        if cr.fetchone():
             cr.execute("""UPDATE ea_import_template tmpl
                         SET sequence = q1.sequence,
                             chain_id = q1.chain_id,
