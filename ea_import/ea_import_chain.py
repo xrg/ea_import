@@ -172,9 +172,10 @@ class ea_import_chain(osv.osv):
             if chain.header:
                 csv_reader.next()
             result = {}
+            if any([True for template in chain.template_ids for line in template.line_ids if line.field_type == 'many2one' and line.many2one_rel_type == 'active_id']):
+                self.check_active_ids(context=context)
             for template in chain.template_ids:
                 model_name = template.target_model_id.model
-                self.check_active_ids(context=context)
                 result.update({model_name: {'ids': set([]), 'post_import_hook': template.post_import_hook}})
             for row_number, record_list in enumerate(csv_reader):
                 if len(record_list) < max([template_line.sequence for template_line in template.line_ids for template in chain.template_ids]):
