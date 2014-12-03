@@ -10,7 +10,7 @@
                 <tree string="Import Log">
                     <field name="import_time"/>
                     <field name="result_ids"/>
-                    <field name="chain_id"/>                                        
+                    <field name="chain_id"/>
                 </tree>
             </field>
         </record>
@@ -22,7 +22,7 @@
             <field name="arch" type="xml">
                 <form string="Import Log" col="2">
                     <field name="import_time" readonly="1"/>
-                    <field name="chain_id" readonly="1"/> 
+                    <field name="chain_id" readonly="1"/>
                     <notebook>
                         <page string="Log Notes">
                             <field name="log_line" nolabel="1" readonly="1"/>
@@ -30,8 +30,8 @@
                         <page string="Import record results">
                             <field name="result_ids" nolabel="1" readonly="1"/>
                         </page>
-                    </notebook>                        
-                    
+                    </notebook>
+
                 </form>
             </field>
         </record>
@@ -42,7 +42,7 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Log Line">
-                    <field name="name"/>                
+                    <field name="name"/>
                 </tree>
             </field>
         </record>
@@ -56,7 +56,7 @@
                     <field name="name" readonly="1"/>
                 </form>
             </field>
-        </record>        
-        
+        </record>
+
     </data>
 </openerp>

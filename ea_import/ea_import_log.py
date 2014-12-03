@@ -31,6 +31,7 @@ class ea_import_log(osv.osv):
         'chain_id': fields.many2one('ea_import.chain', 'Import Chain'),
         'result_ids': fields.one2many('ea_import.chain.result', 'log_id', 'Import Results', ),
     }
+
 ea_import_log()
 
 
@@ -41,3 +42,6 @@ class ea_import_log_line(osv.osv):
         'log_id': fields.many2one('ea_import.log', 'Log ID', readonly=True),
     }
 ea_import_log_line()
+
+
+#eof

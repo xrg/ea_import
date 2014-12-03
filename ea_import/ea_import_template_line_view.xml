@@ -60,8 +60,8 @@
             <field name="view_type">form</field>
             <field name="view_id" ref="ea_import_template_line_tree"/>
             <field name="context">{'template_id':active_id}</field>
-	    <field name="target">current</field>
-        </record>        
+            <field name="target">current</field>
+        </record>
 
     </data>
 </openerp>

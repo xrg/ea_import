@@ -41,7 +41,6 @@
                             colspan="8" attrs="{'invisible':[('ir_act_report_id','!=',False)]}"/>
                         <button name="unlink_action" string="Remove report" type="object" icon="gtk-delete"
                             colspan="8" attrs="{'invisible':[('ir_act_report_id','=',False)]}" />
-                        
                     </group>
                 </form>
             </field>
