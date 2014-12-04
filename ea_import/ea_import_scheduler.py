@@ -88,7 +88,7 @@ class ea_import_scheduler(osv.osv):
                 try:
                     import_chain_obj.import_to_db(cr, uid, [chain_id], context=context)
                     log_notes += "Import completed successfully!\n"
-                except:
+                except Exception:
                     log_notes += "Error with import_to_db function - stopping import - FAILED!\n"
                     log_notes += "Run this manually from Import Chains.  There is a problem with the contents of the CSV.\n"
                     log_obj.write(cr, uid, [log_record], {'log_notes': log_notes, 'state': 'failed'}, context=context)

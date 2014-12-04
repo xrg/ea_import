@@ -107,7 +107,7 @@ class ea_export_config(osv.osv):
                 ir_values_obj.unlink(cr, uid, chain.ir_value_id.id, context)
         return True
 
-    def generate_csv(self, cr, uid, ids, context={}):
+    def generate_csv(self, cr, uid, ids, context=None):
         try:
             from openerp.addons.ea_import.ir_actions_report import CsvExportOpenERPInterface
         except:  # Used to be compatible with v6.0, you need to put this module directly into your server/bin/addons path

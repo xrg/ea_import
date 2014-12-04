@@ -41,7 +41,7 @@ class ea_import_template_line_calc_field(osv.osv):
     _defaults = {
     }
 
-    def calculate(self, cr, uid, ids, previouse_result, string_list, context={}):
+    def calculate(self, cr, uid, ids, previouse_result, string_list, context=None):
         for calc_field in self.browse(cr, uid, ids, context=context):
             result = eval("%f %s %f" % (previouse_result, calc_field.operation, float(string_list[calc_field.column_number - 1].strip() or "0")))
             return result

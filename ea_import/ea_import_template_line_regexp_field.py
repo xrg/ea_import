@@ -28,7 +28,7 @@ class ea_import_template_line_regexp_field(osv.osv):
 
     _columns = {
         'template_line_id': fields.many2one('ea_import.template.line', 'Template Line',),
-        'regexp': fields.char('Regexp', size=512, required="1",
+        'regexp': fields.char('Regexp', size=512, required=True,
                              help='''You can use all power of python regexp.
                               Simple example:
                                 input string - "foo"
@@ -52,7 +52,7 @@ class ea_import_template_line_regexp_field(osv.osv):
         'replace_by': fields.char('Replace by', size=512, required=True, ),
         }
 
-    def replace_string(self, cr, uid, ids, target_string, context={}):
+    def replace_string(self, cr, uid, ids, target_string, context=None):
         for regexp_field in self.browse(cr, uid, ids, context=context):
             search_result = re.search(regexp_field.regexp, target_string)
             if search_result:
