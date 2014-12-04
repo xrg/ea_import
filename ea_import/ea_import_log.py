@@ -28,7 +28,7 @@ class ea_import_log(osv.osv):
     _columns = {
         'log_line': fields.one2many('ea_import.log.line', 'log_id', 'Log Line'),
         'import_time': fields.datetime('Import Time',),
-        'chain_id': fields.many2one('ea_import.chain', 'Import Chain'),
+        'chain_id': fields.many2one('ea_import.chain', 'Import Chain', select=True),
         'result_ids': fields.one2many('ea_import.chain.result', 'log_id', 'Import Results', ),
     }
 
