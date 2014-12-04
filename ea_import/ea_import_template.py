@@ -23,71 +23,6 @@ from osv import fields
 from psycopg2.extensions import adapt
 
 
-class ea_import_template_unique_rule(osv.osv):
-
-    _name = 'ea_import.template.unique.rule'
-
-    _rec_name = 'source_field_id'
-
-    _columns = {
-        'source_field_id': fields.many2one('ir.model.fields', 'Template Line Fields', required=True),
-        'comparison_model_id': fields.many2one('ir.model', 'Comparison Model', required=True),
-        'target_field_id': fields.many2one('ir.model.fields', 'Target Model Fields', required=True),
-        'template_id': fields.many2one('ea_import.template', 'EA import template'),
-        'source_model_id': fields.related('template_id',
-                                          'target_model_id',
-                                          type='integer',
-                                          string="Import Template Model",
-                                          readonly=True, ),
-    }
-
-    def default_get(self, cr, uid, fields, context=None):
-        # getting comparison_model_id
-        if context is None:
-            context = {}
-        result = super(ea_import_template_unique_rule, self).default_get(cr, uid, fields, context=context)
-        if 'target_model_id' in context:
-            result.update({'source_model_id': context.get('target_model_id')})
-        return result
-
-    def onchange_model_id(self, cr, uid, ids, model_id, context={}):
-        # onchange model id running
-        if not model_id:
-            return {'value': {}}
-        return {'value': {'target_field_id': '', }}
-
-    def onchange_target_field_id(self, cr, uid, ids, target_field_id, context={}):
-        if target_field_id:
-            field_in_table = self.check_field_in_table_presense(cr, uid, ids, target_field_id, context=None)
-            if not field_in_table.get('field_present'):
-                raise osv.except_osv(('Error !'), ('%s is not storable and can not be selected as target field') % (field_in_table.get('target_field_name')))
-        return {}
-
-    def write(self, cr, uid, ids, vals, context=None):
-        if vals.get('target_field_id'):
-            field_in_table = self.check_field_in_table_presense(cr, uid, ids, vals.get('target_field_id'), context=None)
-            if not field_in_table.get('field_present'):
-                raise osv.except_osv(('Error !'), ('%s is not storable and can not be selected as target field') % (field_in_table.get('target_field_name')))
-        return super(ea_import_template_unique_rule, self).write(cr, uid, ids, vals, context)
-
-    def check_field_in_table_presense(self, cr, uid, ids, target_field_id, context=None):
-        res = {}
-        if target_field_id:
-            target_field_obj = self.pool.get('ir.model.fields').browse(cr, uid, target_field_id, context=None)
-            target_field_name = target_field_obj.name
-            target_field_description = target_field_obj.field_description
-            model_name = target_field_obj.model_id.model
-            comparison_model_table = self.pool.get(model_name)._table
-            cr.execute('''SELECT column_name
-                          FROM information_schema.columns
-                          WHERE table_name = '%s'
-                          AND column_name = '%s' ''' % (comparison_model_table, target_field_name, ))
-            result = cr.fetchall()
-            res = {'field_present': bool(result), 'target_field_name': target_field_description}
-        return res
-
-ea_import_template_unique_rule()
-
 
 class ea_import_template(osv.osv):
     _name = 'ea_import.template'
@@ -280,4 +215,71 @@ class ea_import_template(osv.osv):
         return True
 
 ea_import_template()
+
+class ea_import_template_unique_rule(osv.osv):
+
+    _name = 'ea_import.template.unique.rule'
+
+    _rec_name = 'source_field_id'
+
+    _columns = {
+        'source_field_id': fields.many2one('ir.model.fields', 'Template Line Fields', required=True),
+        'comparison_model_id': fields.many2one('ir.model', 'Comparison Model', required=True),
+        'target_field_id': fields.many2one('ir.model.fields', 'Target Model Fields', required=True),
+        'template_id': fields.many2one('ea_import.template', 'EA import template'),
+        'source_model_id': fields.related('template_id',
+                                          'target_model_id',
+                                          type='integer',
+                                          string="Import Template Model",
+                                          readonly=True, ),
+    }
+
+    def default_get(self, cr, uid, fields, context=None):
+        # getting comparison_model_id
+        if context is None:
+            context = {}
+        result = super(ea_import_template_unique_rule, self).default_get(cr, uid, fields, context=context)
+        if 'target_model_id' in context:
+            result.update({'source_model_id': context.get('target_model_id')})
+        return result
+
+    def onchange_model_id(self, cr, uid, ids, model_id, context={}):
+        # onchange model id running
+        if not model_id:
+            return {'value': {}}
+        return {'value': {'target_field_id': '', }}
+
+    def onchange_target_field_id(self, cr, uid, ids, target_field_id, context={}):
+        if target_field_id:
+            field_in_table = self.check_field_in_table_presense(cr, uid, ids, target_field_id, context=None)
+            if not field_in_table.get('field_present'):
+                raise osv.except_osv(('Error !'), ('%s is not storable and can not be selected as target field') % (field_in_table.get('target_field_name')))
+        return {}
+
+    def write(self, cr, uid, ids, vals, context=None):
+        if vals.get('target_field_id'):
+            field_in_table = self.check_field_in_table_presense(cr, uid, ids, vals.get('target_field_id'), context=None)
+            if not field_in_table.get('field_present'):
+                raise osv.except_osv(('Error !'), ('%s is not storable and can not be selected as target field') % (field_in_table.get('target_field_name')))
+        return super(ea_import_template_unique_rule, self).write(cr, uid, ids, vals, context)
+
+    def check_field_in_table_presense(self, cr, uid, ids, target_field_id, context=None):
+        res = {}
+        if target_field_id:
+            target_field_obj = self.pool.get('ir.model.fields').browse(cr, uid, target_field_id, context=None)
+            target_field_name = target_field_obj.name
+            target_field_description = target_field_obj.field_description
+            model_name = target_field_obj.model_id.model
+            comparison_model_table = self.pool.get(model_name)._table
+            cr.execute('''SELECT column_name
+                          FROM information_schema.columns
+                          WHERE table_name = '%s'
+                          AND column_name = '%s' ''' % (comparison_model_table, target_field_name, ))
+            result = cr.fetchall()
+            res = {'field_present': bool(result), 'target_field_name': target_field_description}
+        return res
+
+ea_import_template_unique_rule()
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
