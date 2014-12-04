@@ -20,10 +20,6 @@
 
 from osv import osv
 from osv import fields
-try:
-    from openerp.addons.ea_import.ir_actions_report import CsvExportOpenERPInterface
-except:  # Used to be compatible with v6.0, you need to put this module directly into your server/bin/addons path
-    from addons.ea_import.ir_actions_report import CsvExportOpenERPInterface
 
 
 class ea_export_config(osv.osv):
@@ -112,6 +108,11 @@ class ea_export_config(osv.osv):
         return True
 
     def generate_csv(self, cr, uid, ids, context={}):
+        try:
+            from openerp.addons.ea_import.ir_actions_report import CsvExportOpenERPInterface
+        except:  # Used to be compatible with v6.0, you need to put this module directly into your server/bin/addons path
+            from addons.ea_import.ir_actions_report import CsvExportOpenERPInterface
+
         for config in self.browse(cr, uid, ids, context=context):
             if not config.ir_act_report_id:
                 raise osv.except_osv(('Error !'), ("Create report first"))
