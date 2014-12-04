@@ -33,6 +33,7 @@ class ea_import_template_line_boolean_field(osv.osv):
         }
 
     def get_value(self, cr, uid, ids, target_string, context=None):
+        assert len(ids) == 1
         for boolean_field in self.browse(cr, uid, ids, context=context):
             search_result = re.search(boolean_field.regexp, target_string)
             if search_result:
